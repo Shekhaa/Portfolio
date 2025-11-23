@@ -1,39 +1,39 @@
-// Initialize EmailJS (replace with your EmailJS public key)
+// 1) EmailJS init – yahan apna public key lagao
 (function () {
   emailjs.init({
-    publicKey: "YOUR_PUBLIC_KEY_HERE", // e.g. "AbCdEf123456"
+    publicKey: "51MAJKgT5mcwlDeZg", // <- tumhara public key
   });
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
+  // year update for footer
   const yearSpan = document.getElementById("year");
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
   const form = document.getElementById("contact-form");
   const status = document.getElementById("form-status");
 
-  if (!form) return;
-
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     status.textContent = "Sending...";
 
-    const formData = {
-      from_name: document.getElementById("name").value,
-      reply_to: document.getElementById("email").value,
-      message: document.getElementById("message").value,
+    // 2) Yahan vo fields bhej rahe hain jo template me use ho rahe
+    const data = {
+      from_name: document.getElementById("name").value,   // {{from_name}}
+      email: document.getElementById("email").value,       // {{email}}  (Reply To)
+      message: document.getElementById("message").value,   // {{message}}
     };
 
+    // 3) Yahan serviceID + templateID use ho raha hai
     emailjs
-      .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", formData)
+      .send("service_iabxg5n", "template_3smajth", data)
       .then(() => {
         status.textContent = "Thanks! Your message has been sent.";
         form.reset();
       })
-      .catch((err) => {
-        console.error(err);
-        status.textContent =
-          "Oops, something went wrong. Please try again later.";
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        status.textContent = "Kuch galat ho gaya, later try karo.";
       });
   });
 });
